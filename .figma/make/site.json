@@ -1,0 +1,10 @@
+{
+  "description": "Streamlines hospital and lab workflows by simplifying common problem-solving tasks, enhancing efficiency and accuracy for healthcare professionals.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
