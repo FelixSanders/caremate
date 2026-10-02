@@ -3364,6 +3364,10 @@ h1 {
   height: 0;
   border-top: 2px dashed #dc8650;
   border-radius: 0;
+  align-self: stretch;
+  justify-self: stretch;
+  margin: 0;
+  box-shadow: none;
 }
 
 .hospital-plan-1.plan-level-1 { --corridor-y: 42%; --corridor-x: 46%; --wall-x: 31%; --wall-y: 62%; --entrance-x: 44%; --p1-x: 3%; --p2-x: 34%; --p2-y: 7%; --p3-x: 71%; --p4-y: 68%; --p5-x: 34%; --p6-x: 71%; }
@@ -3497,8 +3501,558 @@ h1 {
   --p6-x: 61%; --p6-y: 66%; --p6-w: 37%; --p6-h: 31%;
 }
 
+/* WC alcoves use nine distinct, collision-checked empty zones. */
+.hospital-plan-1.plan-level-1 { --wc-left: 26%; --wc-top: 72%; }
+.hospital-plan-1.plan-level-2 { --wc-left: 84%; --wc-top: 68%; }
+.hospital-plan-1.plan-level-3 { --wc-left: 80%; --wc-top: 70%; }
+
+.hospital-plan-2.plan-level-1 { --wc-left: 47%; --wc-top: 70%; }
+.hospital-plan-2.plan-level-2 { --wc-left: 56%; --wc-top: 70%; }
+.hospital-plan-2.plan-level-3 { --wc-left: 15%; --wc-top: 52%; }
+
+.hospital-plan-3.plan-level-1 { --wc-left: 5%; --wc-top: 70%; }
+.hospital-plan-3.plan-level-2 { --wc-left: 72%; --wc-top: 50%; }
+.hospital-plan-3.plan-level-3 { --wc-left: 54%; --wc-top: 54%; }
+
+/* Rooms fully occupy the zones around a continuous cross-shaped corridor. */
+.plan-building {
+  display: grid;
+  grid-template-rows: calc(50% - 29px) 58px calc(50% - 29px);
+}
+
+.plan-building > .plan-room {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  border-radius: 0;
+}
+
+.plan-room-1 { grid-area: r1; }
+.plan-room-2 { grid-area: r2; }
+.plan-room-3 { grid-area: r3; }
+.plan-room-4 { grid-area: r4; }
+.plan-room-5 { grid-area: r5; }
+.plan-room-6 { grid-area: r6; }
+.plan-room-7 { grid-area: r7; }
+.plan-room-south { grid-area: southroom; }
+
+.plan-corridor.main {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+  width: auto;
+  height: auto;
+  grid-area: hall;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.plan-corridor.main span {
+  width: 45%;
+  text-align: center;
+}
+
+.plan-corridor.cross {
+  top: calc(50% + 29px);
+  bottom: 0;
+  left: 46%;
+  width: 50px;
+}
+
+.plan-corridor.cross span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.layout-1 .plan-building {
+  grid-template-columns: 21% 25% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r4 . r5 r6";
+}
+
+.layout-2 .plan-building {
+  grid-template-columns: 24% 22% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r5 . r6 r6";
+}
+
+.layout-2 { --pin5-x: 33%; --pin6-x: 76%; }
+
+.layout-3 .plan-building {
+  grid-template-columns: 20% 26% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r5 . r6 r6";
+}
+
+.layout-3 { --pin5-x: 33%; --pin6-x: 76%; }
+
+.layout-4 .plan-building {
+  grid-template-columns: 23% 23% 50px 1fr 72px;
+  grid-template-areas: "r2 r3 lift r1 stair" "hall hall hall hall hall" "r4 r5 . r6 r6";
+}
+
+.layout-4 { --pin1-x: 63%; --pin2-x: 10%; --pin3-x: 33%; --pin5-x: 33%; --pin6-x: 76%; }
+
+.layout-5 .plan-building {
+  grid-template-columns: 27% 19% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r5 r4 . r6 r6";
+}
+
+.layout-5 { --pin4-x: 33%; --pin5-x: 10%; --pin6-x: 76%; }
+
+.layout-6 .plan-building {
+  grid-template-columns: 19% 27% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r4 . r5 r6";
+}
+
+.layout-7 .plan-building {
+  grid-template-columns: 25% 21% 50px 1fr 72px;
+  grid-template-areas: "r3 r2 lift r1 stair" "hall hall hall hall hall" "r6 r5 . r4 r4";
+}
+
+.layout-7 { --pin1-x: 63%; --pin2-x: 33%; --pin3-x: 10%; --pin4-x: 76%; --pin5-x: 33%; --pin6-x: 10%; }
+
+.layout-8 .plan-building {
+  grid-template-columns: 22% 24% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r5 . r6 r6";
+}
+
+.layout-8 { --pin5-x: 33%; --pin6-x: 76%; }
+
+.layout-9 .plan-building {
+  grid-template-columns: 26% 20% 50px 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 stair" "hall hall hall hall hall" "r4 r4 . r5 r6";
+}
+
+.plan-level-1 .plan-building {
+  grid-template-columns: 20% 20% 72px 16% 11% 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 r3 r3 stair" "hall hall hall hall hall hall hall" "r6 r6 southroom r4 r5 r5 wc";
+}
+
+.plan-level-2 .plan-building {
+  grid-template-columns: 20% 20% 72px 16% 11% 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 r3 r3 stair" "hall hall hall hall hall hall hall" "r6 r6 southroom r4 r5 r5 wc";
+}
+
+.plan-level-3 .plan-building {
+  grid-template-columns: 20% 20% 72px 16% 11% 1fr 72px;
+  grid-template-areas: "r1 r2 lift r3 r3 r3 stair" "hall hall hall hall hall hall hall" "r6 r7 southroom r4 r5 r5 wc";
+}
+
+.plan-level-1 .plan-corridor.cross,
+.plan-level-2 .plan-corridor.cross,
+.plan-level-3 .plan-corridor.cross {
+  left: 40%;
+}
+
+.plan-room-1 .room-door,
+.plan-room-2 .room-door,
+.plan-room-3 .room-door {
+  top: auto;
+  bottom: -3px;
+}
+
+.plan-room-4 .room-door,
+.plan-room-5 .room-door,
+.plan-room-6 .room-door,
+.plan-room-7 .room-door,
+.plan-room-south .room-door {
+  top: -3px;
+  bottom: auto;
+}
+
+.room-door::after {
+  position: absolute;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #849994;
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0 18px 0 0;
+  content: "";
+  transform-origin: left bottom;
+}
+
+.plan-room-1 .room-door::after,
+.plan-room-2 .room-door::after,
+.plan-room-3 .room-door::after {
+  bottom: 2px;
+  transform: rotate(-90deg);
+}
+
+.plan-room-4 .room-door::after,
+.plan-room-5 .room-door::after,
+.plan-room-6 .room-door::after,
+.plan-room-7 .room-door::after,
+.plan-room-south .room-door::after {
+  top: 2px;
+  transform: rotate(90deg);
+}
+
+.room-name-emergency .room-door {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: -3px;
+  width: 5px;
+  height: 23px;
+  transform: translateY(-50%);
+}
+
+.room-name-emergency .room-door::after {
+  top: 2px;
+  right: auto;
+  bottom: auto;
+  left: 2px;
+  transform: rotate(0deg);
+}
+
+.room-name-emergency::before {
+  top: -3px;
+  right: auto;
+  left: 50%;
+  width: 23px;
+  height: 5px;
+  border: 0;
+  border-right: 2px solid #627873;
+  border-left: 2px solid #627873;
+  border-radius: 0;
+  background: #e9efed;
+  transform: translateX(-50%);
+}
+
+.plan-lifts {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  min-width: 0;
+  width: 46px;
+  height: 46px;
+  grid-area: lift;
+  align-self: start;
+  justify-self: center;
+  align-content: center;
+  margin-top: 10px;
+  border-radius: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(78,106,99,.1) 0 7px, transparent 7px 14px),
+    #e3e9e7;
+}
+
+.lift-corridor-connector {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  grid-area: lift;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 7px;
+  border-right: 1px solid #cddbd7;
+  border-left: 1px solid #cddbd7;
+  color: #7b8d88;
+  background:
+    repeating-linear-gradient(0deg, rgba(92,127,118,.08) 0 8px, transparent 8px 16px),
+    #e9efed;
+  font-size: 5px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.plan-lifts::after {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 24px;
+  height: 5px;
+  border-right: 2px solid #697d78;
+  border-left: 2px solid #697d78;
+  background: #e9efed;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.plan-lifts small {
+  margin-top: 2px;
+  color: #60756f;
+  font-size: 5px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.plan-stairs {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  min-width: 0;
+  width: 72px;
+  height: 100%;
+  grid-area: stair;
+  align-self: stretch;
+  justify-self: end;
+  align-content: center;
+  border: 2px solid #3f776a;
+  border-radius: 0;
+  color: #2f695d;
+  background:
+    repeating-linear-gradient(0deg, rgba(62,119,105,.13) 0 6px, transparent 6px 12px),
+    #e5f0ed;
+}
+
+.plan-stairs span {
+  font-size: 20px;
+}
+
+.plan-stairs b {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: white;
+  background: #377d6c;
+  font-size: 6px;
+  letter-spacing: .08em;
+}
+
+.plan-stairs strong {
+  font-size: 8px;
+  text-align: center;
+}
+
+.plan-stairs small {
+  margin-top: 3px;
+  color: #4f7b71;
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.plan-stairs::after {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 23px;
+  height: 5px;
+  border-right: 2px solid #3f776a;
+  border-left: 2px solid #3f776a;
+  background: #e9efed;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.plan-waiting {
+  top: 47%;
+  left: 57%;
+}
+
+.plan-restroom {
+  width: 52px;
+  min-width: 52px;
+  height: 42px;
+}
+
+.plan-level-2 .plan-restroom,
+.plan-level-3 .plan-restroom {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  grid-area: wc;
+  align-self: stretch;
+  justify-self: stretch;
+  border-radius: 0;
+}
+
+.plan-level-2 .plan-restroom .wc-door,
+.plan-level-3 .plan-restroom .wc-door {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 22px;
+  height: 5px;
+  border-right: 2px solid #697d78;
+  border-left: 2px solid #697d78;
+  background: #e9efed;
+  transform: translateX(-50%);
+}
+
+.hospital-plan-1.plan-level-1 { --wc-left: 5%; --wc-top: 45%; }
+.hospital-plan-1.plan-level-2 { --wc-left: 14%; --wc-top: 46%; }
+.hospital-plan-1.plan-level-3 { --wc-left: 24%; --wc-top: 45%; }
+.hospital-plan-2.plan-level-1 { --wc-left: 34%; --wc-top: 46%; }
+.hospital-plan-2.plan-level-2 { --wc-left: 72%; --wc-top: 45%; }
+.hospital-plan-2.plan-level-3 { --wc-left: 75%; --wc-top: 46%; }
+.hospital-plan-3.plan-level-1 { --wc-left: 7%; --wc-top: 46%; }
+.hospital-plan-3.plan-level-2 { --wc-left: 25%; --wc-top: 45%; }
+.hospital-plan-3.plan-level-3 { --wc-left: 73%; --wc-top: 46%; }
+
+/* Every WC occupies the dedicated south-west corner bay. */
+.hospital-plan-1.plan-level-1,
+.hospital-plan-1.plan-level-2,
+.hospital-plan-1.plan-level-3,
+.hospital-plan-2.plan-level-1,
+.hospital-plan-2.plan-level-2,
+.hospital-plan-2.plan-level-3,
+.hospital-plan-3.plan-level-1,
+.hospital-plan-3.plan-level-2,
+.hospital-plan-3.plan-level-3 {
+  --wc-left: 4%;
+  --wc-top: 45%;
+}
+
+.real-floor-plan .plan-restroom {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  grid-area: wc;
+  align-self: stretch;
+  justify-self: stretch;
+  border-radius: 0;
+}
+
+.real-floor-plan .plan-restroom .wc-door {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 22px;
+  height: 5px;
+  border-right: 2px solid #697d78;
+  border-left: 2px solid #697d78;
+  background: #e9efed;
+  transform: translateX(-50%);
+}
+
+/* Level 1 WCs stay in the far west corridor corner. */
+.hospital-plan-1.plan-level-1,
+.hospital-plan-2.plan-level-1,
+.hospital-plan-3.plan-level-1 {
+  --wc-left: 1%;
+  --wc-top: 45%;
+}
+
+/* Medika Selatan L04 Pharmacy faces its dedicated southern entrance. */
+.hospital-plan-1.plan-level-1 {
+  --entrance-x: 44%;
+}
+
+.hospital-plan-1.plan-level-1 .room-code-l04 .room-door {
+  top: auto;
+  bottom: -3px;
+}
+
+.hospital-plan-1.plan-level-1 .room-code-l04 .room-door::after {
+  top: auto;
+  bottom: 2px;
+  transform: rotate(-90deg);
+}
+
+.plan-fire-exit.exit-left,
+.plan-level-2 .plan-fire-exit,
+.plan-level-3 .plan-fire-exit {
+  display: none;
+}
+
+.real-floor-plan .plan-entrance {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: -2px;
+  display: flex;
+  border: 2px solid #536a65;
+  border-left: 0;
+  writing-mode: vertical-rl;
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.real-floor-plan.plan-level-2 .plan-entrance,
+.real-floor-plan.plan-level-3 .plan-entrance {
+  display: none;
+}
+
+.hospital-plan-1.plan-level-1 .room-code-l04 .room-door {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: -3px;
+  width: 5px;
+  height: 23px;
+  transform: translateY(-50%);
+}
+
+.hospital-plan-1.plan-level-1 .room-code-l04 .room-door::after {
+  top: 2px;
+  right: auto;
+  bottom: auto;
+  left: 2px;
+  transform: rotate(0deg);
+}
+
+/* L04 Pharmacy and L05 Emergency open directly toward the East Corridor. */
+.hospital-plan-1.plan-level-1 :is(.room-code-l04, .room-code-l05) .room-door {
+  top: 50%;
+  right: -3px;
+  bottom: auto;
+  left: auto;
+  width: 5px;
+  height: 24px;
+  background: #e9efed;
+  transform: translateY(-50%);
+}
+
+.hospital-plan-1.plan-level-1 :is(.room-code-l04, .room-code-l05) .room-door::after {
+  display: none;
+}
+
+/* Door openings are anchored to room walls; swing arcs are removed to avoid floating marks. */
+.plan-room > .room-door {
+  z-index: 8;
+  box-sizing: border-box;
+}
+
+.plan-room > .room-door::after {
+  display: none;
+}
+
+.plan-start-pin.pin-room-1,
+.plan-end-pin.pin-room-1 { top: 37%; left: var(--pin1-x, 10%); }
+.plan-start-pin.pin-room-2,
+.plan-end-pin.pin-room-2 { top: 37%; left: var(--pin2-x, 33%); }
+.plan-start-pin.pin-room-3,
+.plan-end-pin.pin-room-3 { top: 37%; left: var(--pin3-x, 63%); }
+.plan-start-pin.pin-room-4,
+.plan-end-pin.pin-room-4 { top: 58%; left: var(--pin4-x, 10%); }
+.plan-start-pin.pin-room-5,
+.plan-end-pin.pin-room-5 { top: 58%; left: var(--pin5-x, 60%); }
+.plan-start-pin.pin-room-6,
+.plan-end-pin.pin-room-6 { top: 58%; left: var(--pin6-x, 83%); }
+.plan-start-pin.pin-room-7,
+.plan-end-pin.pin-room-7 { top: 58%; left: var(--pin7-x, 89%); }
+
 .plan-start-pin.pov-fixed {
-  top: calc(var(--lift-top, 39%) + 9px);
+  top: calc(44% + 9px);
   right: auto;
   bottom: auto;
   left: calc(var(--lift-left, 6%) + 51px);
@@ -3514,6 +4068,47 @@ h1 {
   border-radius: 19px;
   background: white;
   box-shadow: 0 18px 40px rgba(28, 67, 59, 0.07);
+}
+
+.content-wrap.directions-content-wrap {
+  width: calc(100% - 5vw);
+  max-width: none;
+  padding-top: 32px;
+}
+
+.directions-info-only {
+  min-height: calc(100vh - 165px);
+  grid-template-columns: 1fr;
+}
+
+.directions-info-only .directions-panel {
+  width: 100%;
+  padding: clamp(28px, 5vw, 64px);
+  border-left: 0;
+}
+
+.directions-info-only .route-summary,
+.directions-info-only .route-overview,
+.directions-info-only .current-instruction,
+.directions-info-only .direction-controls,
+.directions-info-only .accessible-route {
+  width: min(820px, 100%);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.directions-info-only .current-instruction {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  column-gap: 20px;
+}
+
+.directions-info-only .current-instruction .instruction-count {
+  grid-column: 1 / -1;
+}
+
+.directions-info-only .turn-icon {
+  grid-row: 2 / 4;
 }
 
 .navigation-map {
@@ -5646,6 +6241,11 @@ h1 {
   border-radius: 0;
 }
 
+.nav-route,
+.nav-start {
+  display: none;
+}
+
 .dark .route-overview {
   border-color: #2d3e3a;
 }
@@ -5962,6 +6562,14 @@ h1 {
   background: #16211f;
 }
 
+.dark .room-door::after {
+  border-color: #718a83;
+}
+
+.dark .hospital-plan-1.plan-level-1 :is(.room-code-l04, .room-code-l05) .room-door {
+  background: #25332f;
+}
+
 .dark .plan-room::before,
 .dark .plan-facility {
   border-color: #526a64;
@@ -5977,6 +6585,48 @@ h1 {
 .dark .plan-waiting i {
   border-color: #607a73;
   background: #344943;
+}
+
+.dark .plan-stairs {
+  color: #b7ded5;
+  border-color: #4f8478;
+  background:
+    repeating-linear-gradient(0deg, rgba(112,178,162,.12) 0 6px, transparent 6px 12px),
+    #233a35;
+}
+
+.dark .plan-stairs small {
+  color: #91bdb3;
+}
+
+.dark .plan-stairs::after {
+  border-color: #5b8d82;
+  background: #25332f;
+}
+
+.dark .plan-lifts {
+  border-color: #607870;
+  background:
+    repeating-linear-gradient(90deg, rgba(133,169,159,.1) 0 7px, transparent 7px 14px),
+    #2b3c38;
+}
+
+.dark .lift-corridor-connector {
+  color: #8fa49e;
+  border-color: #3a4e49;
+  background:
+    repeating-linear-gradient(0deg, rgba(140,175,165,.08) 0 8px, transparent 8px 16px),
+    #25332f;
+}
+
+.dark .plan-lifts::after {
+  border-color: #607870;
+  background: #25332f;
+}
+
+.dark .plan-restroom .wc-door {
+  border-color: #607870;
+  background: #25332f;
 }
 
 .dark .plan-entrance {

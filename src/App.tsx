@@ -104,17 +104,17 @@ const hospitalsByLocation: Record<string, { name: string; distance: string; avai
 
 const hospitalMapData: Record<string, { starts: string[]; destinations: string[]; wing: string }> = {
   "CareMate Medika Selatan": {
-    starts: ["Main Lobby", "Parking Area", "Emergency Entrance", "Pharmacy"],
+    starts: ["Waiting Room", "Parking Area", "Emergency Entrance", "Pharmacy"],
     destinations: ["General Practice • Room 204", "Laboratory • Level 1", "Cardiology • Room 201", "Pharmacy • Level 1"],
     wing: "East Wing",
   },
   "CareMate Central Hospital": {
-    starts: ["South Lobby", "Underground Parking", "Emergency Entrance", "Cafeteria"],
+    starts: ["Waiting Room", "Underground Parking", "Emergency Entrance", "Cafeteria"],
     destinations: ["Specialist Clinic • Room 304", "Imaging • Room 302", "Laboratory • Level 1", "Patient Services • Level 2"],
     wing: "Central Tower",
   },
   "CareMate West Medical Center": {
-    starts: ["West Lobby", "Visitor Parking", "Transit Drop-off", "Rehabilitation"],
+    starts: ["Waiting Room", "Visitor Parking", "Transit Drop-off", "Rehabilitation"],
     destinations: ["Dental Care • Room 112", "General Practice • Room 205", "Radiology • Level 3", "Pharmacy • Ground Floor"],
     wing: "West Pavilion",
   },
@@ -125,9 +125,9 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
     "Level 1": {
       label: "Admissions & Diagnostics",
       rooms: [
-        { code: "L01", name: "Main Lobby" }, { code: "L02", name: "Registration" },
-        { code: "L03", name: "Laboratory" }, { code: "L04", name: "Pharmacy" },
-        { code: "L05", name: "Emergency" }, { code: "L06", name: "Imaging" },
+        { code: "L01", name: "Waiting Room" }, { code: "L02", name: "Registration" },
+        { code: "L03", name: "Laboratory" }, { code: "L06", name: "Imaging" },
+        { code: "L04", name: "Pharmacy" }, { code: "L05", name: "Emergency" },
       ],
     },
     "Level 2": {
@@ -143,7 +143,8 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
       rooms: [
         { code: "301", name: "Radiology" }, { code: "302", name: "Imaging" },
         { code: "303", name: "Neurology" }, { code: "304", name: "Specialist Clinic" },
-        { code: "305", name: "Recovery" }, { code: "306", name: "Quiet Lounge" },
+        { code: "307", name: "Recovery" }, { code: "305", name: "Quiet Lounge" },
+        { code: "306", name: "Mortuary" },
       ],
     },
   },
@@ -151,7 +152,7 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
     "Level 1": {
       label: "Public Services",
       rooms: [
-        { code: "C01", name: "South Lobby" }, { code: "C02", name: "Patient Services" },
+        { code: "C01", name: "Waiting Room" }, { code: "C02", name: "Patient Services" },
         { code: "C03", name: "Laboratory" }, { code: "C04", name: "Cafeteria" },
         { code: "C05", name: "Emergency" }, { code: "C06", name: "Pharmacy" },
       ],
@@ -169,7 +170,8 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
       rooms: [
         { code: "301", name: "MRI Suite" }, { code: "302", name: "Imaging" },
         { code: "303", name: "Ultrasound" }, { code: "304", name: "Specialist Clinic" },
-        { code: "305", name: "Preparation" }, { code: "306", name: "Results Desk" },
+        { code: "307", name: "Preparation" }, { code: "305", name: "Quiet Lounge" },
+        { code: "306", name: "Mortuary" },
       ],
     },
   },
@@ -177,9 +179,9 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
     "Level 1": {
       label: "Community Care",
       rooms: [
-        { code: "W01", name: "West Lobby" }, { code: "W02", name: "Dental Care" },
+        { code: "W01", name: "Waiting Room" }, { code: "W02", name: "Dental Care" },
         { code: "W03", name: "Rehabilitation" }, { code: "W04", name: "Pharmacy" },
-        { code: "W05", name: "Minor Procedures" }, { code: "W06", name: "Reception" },
+        { code: "W05", name: "Emergency" }, { code: "W06", name: "Reception" },
       ],
     },
     "Level 2": {
@@ -195,7 +197,8 @@ const hospitalFloorPlans: Record<string, Record<string, { label: string; rooms: 
       rooms: [
         { code: "311", name: "Radiology" }, { code: "312", name: "CT Scan" },
         { code: "313", name: "Physiotherapy" }, { code: "314", name: "Specialist Clinic" },
-        { code: "315", name: "Recovery" }, { code: "316", name: "Staff Station" },
+        { code: "317", name: "Recovery" }, { code: "315", name: "Quiet Lounge" },
+        { code: "316", name: "Mortuary" },
       ],
     },
   },
@@ -234,7 +237,7 @@ export default function App() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notificationsRead, setNotificationsRead] = useState(false);
   const [mapHospital, setMapHospital] = useState("CareMate Medika Selatan");
-  const [mapStart, setMapStart] = useState("Main Lobby");
+  const [mapStart, setMapStart] = useState("Waiting Room");
   const [mapDestination, setMapDestination] = useState("General Practice • Room 204");
   const [darkMode, setDarkMode] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -426,7 +429,7 @@ export default function App() {
 
   const startFloor = getLocationFloor(mapStart);
   const destinationFloor = getLocationFloor(mapDestination);
-  const liftName = mapHospital === "CareMate Central Hospital" ? "Central Lifts" : mapHospital === "CareMate West Medical Center" ? "West Lifts" : "Lifts A";
+  const liftName = "Lift";
   const startingInstruction = /parking/i.test(mapStart)
     ? `Leave ${mapStart} through the pedestrian entrance`
     : /emergency/i.test(mapStart)
@@ -477,40 +480,9 @@ export default function App() {
       turn: "✓",
     },
   ];
-  const activeFloorPlan = hospitalFloorPlans[mapHospital][mapFloor];
   const displayedFloor = Number(mapFloor.slice(-1));
-  const destinationTitle = mapDestination.split(" • ")[0].toLowerCase();
-  const destinationRoomIndex = activeFloorPlan.rooms.findIndex((room) =>
-    room.name.toLowerCase().includes(destinationTitle) || destinationTitle.includes(room.name.toLowerCase()),
-  );
-  const visibleDestinationIndex = destinationFloor === displayedFloor ? destinationRoomIndex : -2;
   const hospitalPlanIndex = Object.keys(hospitalMapData).indexOf(mapHospital);
   const floorLayoutPattern = hospitalPlanIndex * 3 + displayedFloor - 1;
-  const roomRoutePoints = [
-    [{ x: 72, y: 105 }, { x: 300, y: 145 }, { x: 510, y: 105 }, { x: 72, y: 250 }, { x: 445, y: 180 }, { x: 545, y: 180 }],
-    [{ x: 120, y: 180 }, { x: 285, y: 110 }, { x: 410, y: 110 }, { x: 535, y: 110 }, { x: 285, y: 255 }, { x: 420, y: 255 }],
-    [{ x: 85, y: 110 }, { x: 220, y: 110 }, { x: 495, y: 180 }, { x: 85, y: 260 }, { x: 240, y: 260 }, { x: 395, y: 260 }],
-    [{ x: 500, y: 180 }, { x: 65, y: 105 }, { x: 185, y: 105 }, { x: 305, y: 105 }, { x: 85, y: 255 }, { x: 225, y: 255 }],
-    [{ x: 90, y: 105 }, { x: 305, y: 145 }, { x: 540, y: 105 }, { x: 540, y: 255 }, { x: 70, y: 180 }, { x: 170, y: 180 }],
-    [{ x: 75, y: 105 }, { x: 300, y: 125 }, { x: 520, y: 105 }, { x: 95, y: 260 }, { x: 300, y: 260 }, { x: 505, y: 260 }],
-    [{ x: 500, y: 110 }, { x: 380, y: 110 }, { x: 120, y: 150 }, { x: 500, y: 260 }, { x: 360, y: 260 }, { x: 210, y: 260 }],
-    [{ x: 85, y: 110 }, { x: 300, y: 155 }, { x: 515, y: 110 }, { x: 80, y: 260 }, { x: 300, y: 260 }, { x: 520, y: 260 }],
-    [{ x: 70, y: 115 }, { x: 210, y: 115 }, { x: 500, y: 140 }, { x: 75, y: 260 }, { x: 250, y: 260 }, { x: 475, y: 260 }],
-  ];
-  const routePointFor = (roomIndex: number, fallback: "entrance" | "lift") => {
-    if (roomIndex >= 0) {
-      return roomRoutePoints[floorLayoutPattern][roomIndex];
-    }
-    return fallback === "entrance" ? { x: 300, y: 342 } : { x: 270, y: 180 };
-  };
-  const fixedPovPoints = [{ x: 328, y: 180 }, { x: 328, y: 180 }, { x: 328, y: 180 }];
-  const visibleStartPoint = fixedPovPoints[hospitalPlanIndex];
-  const visibleEndPoint = routePointFor(visibleDestinationIndex, destinationFloor === displayedFloor ? "entrance" : "lift");
-  const planRoutePoints = `${visibleStartPoint.x},${visibleStartPoint.y} ${visibleStartPoint.x},180 ${visibleEndPoint.x},180 ${visibleEndPoint.x},${visibleEndPoint.y}`;
-  const planStartClass = "pov-fixed";
-  const planEndClass = visibleDestinationIndex >= 0 ? `pin-room-${visibleDestinationIndex + 1}` : "pin-lift";
-  const planStartLabel = startFloor === displayedFloor ? mapStart : `${liftName} from Level ${startFloor}`;
-  const planEndLabel = destinationFloor === displayedFloor ? mapDestination.split(" • ")[0] : `${liftName} to Level ${destinationFloor}`;
 
   if (!authenticated) {
     return (
@@ -716,7 +688,7 @@ export default function App() {
           )}
         </header>
 
-        <section className="content-wrap">
+        <section className={`content-wrap ${activeView === "Directions" ? "directions-content-wrap" : ""}`}>
           {activeView === "Home" && (
             <>
           <div className="welcome-row">
@@ -1063,7 +1035,7 @@ export default function App() {
                   <h1>Hospital map</h1>
                   <p className="subhead">Simple directions from where you are to where you need to be.</p>
                 </div>
-                <div className="location-pill"><span /> You are near Main Lobby</div>
+                <div className="location-pill"><span /> You are near Waiting Room</div>
               </div>
               <section className="map-route-planner">
                 <label className="hospital-select">
@@ -1097,7 +1069,7 @@ export default function App() {
                     setMapFloor(destination.includes("3") ? "Level 3" : destination.includes("2") || destination.includes("Room 2") ? "Level 2" : "Level 1");
                   }}>{[...hospitalMapData[mapHospital].starts, ...hospitalMapData[mapHospital].destinations].map((point) => <option key={point}>{point}</option>)}</select></label>
                 </div>
-                <button className="primary-button" onClick={() => { setDirectionStep(0); setActiveView("Directions"); }}>Show route <Icon name="arrow" size={16} /></button>
+                <button className="primary-button" onClick={() => { setDirectionStep(0); setActiveView("Directions"); }}>View directions <Icon name="arrow" size={16} /></button>
               </section>
               <div className="map-layout">
                 <aside className="map-sidebar">
@@ -1128,38 +1100,37 @@ export default function App() {
                   <div className="floor-tabs">
                     {["Level 1", "Level 2", "Level 3"].map((floor) => <button className={mapFloor === floor ? "active" : ""} onClick={() => setMapFloor(floor)} key={floor}>{floor}</button>)}
                   </div>
-                  <div className={`real-floor-plan hospital-plan-${Object.keys(hospitalMapData).indexOf(mapHospital) + 1} plan-level-${mapFloor.slice(-1)}`}>
+                  <div className={`real-floor-plan hospital-plan-${Object.keys(hospitalMapData).indexOf(mapHospital) + 1} plan-level-${mapFloor.slice(-1)} layout-${floorLayoutPattern + 1}`}>
                     <div className="plan-heading"><div><strong>{mapHospital}</strong><span>{hospitalFloorPlans[mapHospital][mapFloor].label}</span></div><span>{mapFloor} • {hospitalMapData[mapHospital].wing}</span></div>
                     <div className="plan-building">
-                      <div className="plan-corridor main"><span>Main corridor</span></div>
-                      <div className="plan-corridor cross" />
+                      <div className="plan-corridor main"><span>West Corridor</span><span>East Corridor</span></div>
+                      <div className="plan-room plan-room-south">
+                        <span className="room-code">S{mapFloor.slice(-1)}0</span>
+                        <strong>Support Room</strong>
+                        <i className="room-door" />
+                      </div>
                       {hospitalFloorPlans[mapHospital][mapFloor].rooms.map((room, index) => (
-                        <div className={`plan-room plan-room-${index + 1}`} key={`${room.code}-${room.name}`}>
+                        <div className={`plan-room plan-room-${index + 1} room-code-${room.code.toLowerCase()} room-name-${room.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} key={`${room.code}-${room.name}`}>
                           <span className="room-code">{room.code}</span>
                           <strong>{room.name}</strong>
                           <i className="room-door" />
                         </div>
                       ))}
-                      <div className="plan-facility plan-lifts"><span>⇅</span><strong>Lifts</strong></div>
-                      <div className="plan-facility plan-stairs"><span>↗</span><strong>Stairs</strong></div>
-                      <div className="plan-facility plan-restroom"><span>WC</span><strong>Restroom</strong></div>
-                      <div className="plan-waiting"><i /><i /><i /><span>Waiting</span></div>
+                      <div className="lift-corridor-connector"><span>North Corridor</span></div>
+                      <div className="plan-facility plan-lifts"><span>⇅</span><strong>Lifts</strong><small>North core</small></div>
+                      <div className="plan-facility plan-stairs"><b>EXIT</b><span>↗</span><strong>Emergency stairs</strong><small>Corner fire exit</small></div>
+                      <button className="plan-facility plan-restroom" aria-label={`Restroom location on ${mapFloor}`} onClick={() => showNotice(`Restroom highlighted on ${mapFloor}`)}><span>WC</span><strong>Restroom</strong><i className="wc-door" /></button>
                       <div className="plan-fire-exit exit-left">Exit</div>
                       <div className="plan-fire-exit exit-right">Exit</div>
                       <div className="plan-entrance"><span>Entrance</span><i /></div>
-                      <svg className="plan-route" viewBox="0 0 600 360" preserveAspectRatio="none" aria-hidden="true">
-                        <polyline points={planRoutePoints} />
-                      </svg>
-                      <div className={`plan-start-pin ${planStartClass}`}><span><Icon name="person" size={15} /></span><small>{planStartLabel}</small></div>
-                      <div className={`plan-end-pin ${planEndClass}`}><span><Icon name="map" size={15} /></span><small>{planEndLabel}</small></div>
                       <div className="floor-compass">N ↑</div>
                     </div>
-                    <div className="plan-legend"><span><i className="legend-start" />Your starting point</span><span><i className="legend-end" />Destination</span><span><i className="legend-route" />Accessible route</span></div>
+                    <div className="plan-legend"><span><strong>Lift</strong> North service core</span><span><strong>WC</strong> South-east corner</span><span><strong>Exit</strong> North-east emergency stairs</span></div>
                   </div>
                   <div className="direction-bar">
                     <div className="direction-number">{mapFloor.slice(-1)}</div>
                     <div><span>About 3–6 minutes from {mapStart}</span><strong>Route to {mapDestination} at {mapHospital}</strong></div>
-                    <button onClick={() => { setDirectionStep(0); setActiveView("Directions"); }}>Start directions <Icon name="arrow" size={17} /></button>
+                    <button onClick={() => { setDirectionStep(0); setActiveView("Directions"); }}>View directions <Icon name="arrow" size={17} /></button>
                   </div>
                 </section>
               </div>
@@ -1778,15 +1749,7 @@ export default function App() {
           {activeView === "Directions" && (
             <div className="page-view">
               <button className="back-button" onClick={() => setActiveView("Hospital map")}><span>←</span> Exit directions</button>
-              <div className="directions-layout">
-                <section className="navigation-map">
-                  <div className="nav-map-grid" />
-                  <div className={`nav-route route-step-${directionStep}`} />
-                  <div className="nav-start"><Icon name="person" size={17} /></div>
-                  <div className="nav-end"><Icon name="map" size={17} /></div>
-                  <div className="nav-level-badge">Level {routeSteps[directionStep].floor} • {hospitalMapData[mapHospital].wing}</div>
-                  <button className="recenter-button" onClick={() => showNotice("Map centered on your location")}>◎ Recenter</button>
-                </section>
+              <div className="directions-layout directions-info-only">
                 <aside className="directions-panel">
                   <div className="route-summary"><span>{mapHospital}</span><h1>{mapDestination.split(" • ")[0]}</h1><p>From {mapStart} • {hospitalMapData[mapHospital].wing}</p><div><strong>{startFloor === destinationFloor ? "3–4 min" : "5–7 min"}</strong><span>{startFloor === destinationFloor ? `Stay on Level ${startFloor}` : `Level ${startFloor} → Level ${destinationFloor}`} • Step-free</span></div></div>
                   <div className="route-overview">
